@@ -34,7 +34,6 @@ class DNA
         double T_ETA_K;
         double T_ETA_EV0;
         double T_ETA_C0;
-
 };
 
 #endif

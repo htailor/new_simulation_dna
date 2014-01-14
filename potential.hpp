@@ -3,40 +3,39 @@
 
 class Potential
 {
-    public:
+	public:
 		Potential();
 		Potential(double kappa_, double sigma_, double eta_b_);
     
 		virtual double Value(double x_);
-        virtual void DisplayType();
+      virtual void DisplayType();
     
-        double ETA_B();
+      double ETA_B();
+		double Kappa();
+		double Sigma();
 
 	protected:
     
 		double kappa;
 		double sigma;
     
-        double eta_b;
-
+      double eta_b;
 };
 
 class HarmonicPotential: public Potential
 {
 	public:
-        HarmonicPotential(double kappa_, double sigma_, double eta_b_);
+      HarmonicPotential(double kappa_, double sigma_, double eta_b_);
 		double Value(double x_);
-        void DisplayType();
-    
+      void DisplayType();
 };
 
 class AnharmonicPotential: public Potential
 {
 	public:
-        AnharmonicPotential(double kappa_, double sigma_, double eta_b_);
+      AnharmonicPotential(double kappa_, double sigma_, double eta_b_);
 		double Value(double x_);
-        void DisplayType();
-    
+      void DisplayType();
 };
 
 #endif

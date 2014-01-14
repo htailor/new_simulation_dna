@@ -1,9 +1,11 @@
 #include <cmath>
 #include <iostream>
-#include "dna.hpp"
+
 #include <boost/math/special_functions/hermite.hpp>
 #include <boost/math/special_functions/factorials.hpp>
+
 #include "mathematical_functions.hpp"
+#include "dna.hpp"
 
 DNA::DNA(){}
 
@@ -60,9 +62,12 @@ double DNA::LAMBDA_T(int t_)
 
 double DNA::PSI_T(int t_, double eta_)
 {
-    using namespace boost::math;
+    //using namespace boost::math;
     
-    return 2*T_ETA_C0*Sqrt(1/pow(2,t_)*factorial<double>(t_))*exp(-0.5*T_ETA_C*Squared(eta_))*hermite(t_,T_ETA_B*eta_);
+    //return 2*T_ETA_C0*Sqrt(1/pow(2,t_)*factorial<double>(t_))*exp(-0.5*T_ETA_C*Squared(eta_))*hermite(t_,T_ETA_B*eta_);
+    //return 2*T_ETA_C0*Sqrt(1/pow(2,t_)*factorial<double>(t_))*exp(-0.5*T_ETA_C*Squared(eta_));//*hermite(t_,T_ETA_B*eta_);
+
+	 return boost::math::factorial<double>(2);
 }
 
 

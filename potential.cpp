@@ -26,6 +26,16 @@ double Potential::ETA_B()
     return eta_b;
 }
 
+double Potential::Kappa()
+{
+	return kappa;
+}
+
+double Potential::Sigma()
+{
+	return sigma;
+}
+
 
 /// Harmonic Potential ///
 

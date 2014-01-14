@@ -34,7 +34,6 @@ inline double Sqrt(T x_)
 	return sqrt(x_);
 }
 
-
-double Factorial(int &x_);
+double Factorial(int x_);
 
 #endif

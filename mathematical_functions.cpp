@@ -1,7 +1,7 @@
 #include "mathematical_functions.hpp"
 //#include <array>
 
-double Factorial(int &x_)
+double Factorial(int x_)
 {
     static const int precision_limit_n_ = 170;
     
