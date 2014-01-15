@@ -7,18 +7,17 @@ class Potential
 		Potential();
 		Potential(double kappa_, double sigma_, double eta_b_);
     
-		virtual double Value(double x_);
-      virtual void DisplayType();
-    
-      double ETA_B();
-		double Kappa();
-		double Sigma();
+      double val_etab();
+		double val_kappa();
+		double val_sigma();
 
+      virtual void DisplayType();
+		virtual double Value(double x_);
+    
 	protected:
     
 		double kappa;
 		double sigma;
-    
       double eta_b;
 };
 

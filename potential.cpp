@@ -3,13 +3,7 @@
 
 Potential::Potential(){}
 
-Potential::Potential(double kappa_, double sigma_, double eta_b_)
-{
-    kappa = kappa_;
-    sigma = sigma_;
-
-    eta_b = eta_b_;
-}
+Potential::Potential(double kappa_, double sigma_, double eta_b_) : kappa(kappa_), sigma(sigma_), eta_b(eta_b_) {}
 
 double Potential::Value(double x_)
 {
@@ -21,17 +15,17 @@ void Potential::DisplayType()
     std::cout << "Potential Type: CONSTANT" << std::endl;
 }
 
-double Potential::ETA_B()
+double Potential::val_etab()
 {
     return eta_b;
 }
 
-double Potential::Kappa()
+double Potential::val_kappa()
 {
 	return kappa;
 }
 
-double Potential::Sigma()
+double Potential::val_sigma()
 {
 	return sigma;
 }
