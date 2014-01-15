@@ -3,7 +3,10 @@
 
 Potential::Potential(){}
 
-Potential::Potential(double kappa_, double sigma_, double eta_b_) : kappa(kappa_), sigma(sigma_), eta_b(eta_b_) {}
+Potential::Potential(double kappa_, double sigma_, double eta_b_) : kappa(kappa_), sigma(sigma_), eta_b(eta_b_)
+{
+	name = "constant";
+}
 
 double Potential::val_etab()
 {
@@ -25,38 +28,37 @@ double Potential::Value(double x_)
     return kappa/sigma;
 }
 
+std::string Potential::potential_name()
+{
+    return name;
+}
+
 void Potential::DisplayType()
 {
-    std::cout << "Potential Type: CONSTANT" << std::endl;
+    std::cout << "Potential Type: " << name << std::endl;
 }
 
 /// Harmonic Potential ///
 
-HarmonicPotential::HarmonicPotential(double kappa_, double sigma_, double eta_b_) : Potential(kappa_, sigma_, eta_b_) {}
+HarmonicPotential::HarmonicPotential(double kappa_, double sigma_, double eta_b_) : Potential(kappa_, sigma_, eta_b_)
+{
+	name = "harmonic";
+}
 
 double HarmonicPotential::Value(double x_)
 {
 	return kappa/sigma*Squared(x_);
 }
 
-void HarmonicPotential::DisplayType()
-{
-    std::cout << "Potential Type: HARMONIC" << std::endl;
-}
-
-
-
 /// Anharmonic Potential ///
 
-AnharmonicPotential::AnharmonicPotential(double kappa_, double sigma_, double eta_b_) : Potential(kappa_, sigma_, eta_b_) {}
+AnharmonicPotential::AnharmonicPotential(double kappa_, double sigma_, double eta_b_) : Potential(kappa_, sigma_, eta_b_)
+{
+	name = "anharmonic";
+}
 
 double AnharmonicPotential::Value(double x_)
 {
 	return kappa/sigma*Sqrt(x_);
-}
-
-void AnharmonicPotential::DisplayType()
-{
-    std::cout << "Potential Type: ANHARMONIC" << std::endl;
 }
 

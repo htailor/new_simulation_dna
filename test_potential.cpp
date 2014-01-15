@@ -17,7 +17,7 @@ int main()
 	assert(P->val_sigma()==sigma);
    std::cout << "PASSED..." << std::endl;    
    P->DisplayType();    
-   
+   std::cout << P->potential_name() << std::endl; 
 
 	double hkappa = 20;
 	double hsigma = 5.0;
@@ -30,6 +30,7 @@ int main()
 	assert(H->val_sigma()==hsigma);
    std::cout << "PASSED..." << std::endl;    
    H->DisplayType();    
+   std::cout << H->potential_name() << std::endl; 
  
 	return 0;
 }

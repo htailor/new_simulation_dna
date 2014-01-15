@@ -1,6 +1,8 @@
 #ifndef _POTENTIAL_
 #define _POTENTIAL_
 
+#include <string>
+
 class Potential
 {
 	public:
@@ -11,7 +13,10 @@ class Potential
 		double val_kappa();
 		double val_sigma();
 
-      virtual void DisplayType();
+		std::string potential_name();
+
+      void DisplayType();
+
 		virtual double Value(double x_);
     
 	protected:
@@ -19,6 +24,9 @@ class Potential
 		double kappa;
 		double sigma;
       double eta_b;
+
+		std::string name;
+
 };
 
 class HarmonicPotential: public Potential
@@ -26,7 +34,6 @@ class HarmonicPotential: public Potential
 	public:
       HarmonicPotential(double kappa_, double sigma_, double eta_b_);
 		double Value(double x_);
-      void DisplayType();
 };
 
 class AnharmonicPotential: public Potential
@@ -34,7 +41,6 @@ class AnharmonicPotential: public Potential
 	public:
       AnharmonicPotential(double kappa_, double sigma_, double eta_b_);
 		double Value(double x_);
-      void DisplayType();
 };
 
 #endif
