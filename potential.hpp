@@ -2,28 +2,24 @@
 #define _POTENTIAL_
 
 #include <string>
+#include "nucleation.hpp"
 
 class Potential
 {
 	public:
 		Potential();
-		Potential(double kappa_, double sigma_, double eta_b_);
+		Potential(Nucleation nucleation_parameters_);
     
-      double val_etab();
-		double val_kappa();
-		double val_sigma();
-
 		std::string potential_name();
 
       void DisplayType();
+		void OutputPotentialData();
 
 		virtual double Value(double x_);
     
 	protected:
     
-		double kappa;
-		double sigma;
-      double eta_b;
+		Nucleation nucleation_parameters;
 
 		std::string name;
 
@@ -32,14 +28,14 @@ class Potential
 class HarmonicPotential: public Potential
 {
 	public:
-      HarmonicPotential(double kappa_, double sigma_, double eta_b_);
+      HarmonicPotential(Nucleation nucleation_parameters_);
 		double Value(double x_);
 };
 
 class AnharmonicPotential: public Potential
 {
 	public:
-      AnharmonicPotential(double kappa_, double sigma_, double eta_b_);
+      AnharmonicPotential(Nucleation nucleation_parameters_);
 		double Value(double x_);
 };
 

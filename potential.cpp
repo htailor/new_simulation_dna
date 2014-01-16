@@ -1,64 +1,67 @@
+#include <fstream>
 #include "potential.hpp"
 #include "mathematical_functions.hpp"
 
 Potential::Potential(){}
 
-Potential::Potential(double kappa_, double sigma_, double eta_b_) : kappa(kappa_), sigma(sigma_), eta_b(eta_b_)
+Potential::Potential(Nucleation nucleation_parameters_) : nucleation_parameters(nucleation_parameters_)
 {
 	name = "constant";
 }
 
-double Potential::val_etab()
+double Potential::Value(double x_)	// The equation of the potential
 {
-    return eta_b;
+    return nucleation_parameters.kappa/nucleation_parameters.sigma;
 }
 
-double Potential::val_kappa()
-{
-	return kappa;
-}
-
-double Potential::val_sigma()
-{
-	return sigma;
-}
-
-double Potential::Value(double x_)
-{
-    return kappa/sigma;
-}
-
-std::string Potential::potential_name()
+std::string Potential::potential_name()	// Returns the string name of the potential
 {
     return name;
 }
 
-void Potential::DisplayType()
+void Potential::DisplayType()		// Prints the name of the potential
 {
-    std::cout << "Potential Type: " << name << std::endl;
+    std::cout << "Potential Type: " << potential_name() << std::endl;
 }
+
+void Potential::OutputPotentialData()	// Outputs the potential data to a file.
+{
+	std::string data_filename = "potential_" + potential_name() + ".data";	// Specifies the filename to be created
+
+	std::ofstream potential_data_file(data_filename.data());
+	if(potential_data_file.is_open())
+	{
+		for(int i = -nucleation_parameters.m;i<=nucleation_parameters.m;++i){	// Writes x,y data points for the potential from -m*Delta to m*Delta (from nucleation)
+			double xData = i*nucleation_parameters.Delta;								// Points at -L and L can be ignored since it does not affect the shape of the potential
+			double yData = Value(xData);
+			potential_data_file << xData << "," << yData << std::endl;
+		}		
+		potential_data_file.close();
+	}
+}
+
 
 /// Harmonic Potential ///
 
-HarmonicPotential::HarmonicPotential(double kappa_, double sigma_, double eta_b_) : Potential(kappa_, sigma_, eta_b_)
+HarmonicPotential::HarmonicPotential(Nucleation nucleation_parameters_) : Potential(nucleation_parameters_)
 {
 	name = "harmonic";
 }
 
 double HarmonicPotential::Value(double x_)
 {
-	return kappa/sigma*Squared(x_);
+	return nucleation_parameters.kappa/nucleation_parameters.sigma*Squared(x_);
 }
 
 /// Anharmonic Potential ///
 
-AnharmonicPotential::AnharmonicPotential(double kappa_, double sigma_, double eta_b_) : Potential(kappa_, sigma_, eta_b_)
+AnharmonicPotential::AnharmonicPotential(Nucleation nucleation_parameters_) : Potential(nucleation_parameters_)
 {
 	name = "anharmonic";
 }
 
 double AnharmonicPotential::Value(double x_)
 {
-	return kappa/sigma*Sqrt(x_);
+	return nucleation_parameters.kappa/nucleation_parameters.sigma*Sqrt(x_);
 }
 
