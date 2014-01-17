@@ -4,5 +4,5 @@
 
 clear
 echo "Compiling Nucleation..."
-g++ -fopenmp -I/opt/local/include main.cpp nucleation.cpp -o Nucleation -L/opt/local/lib -lboost_program_options-mt
+g++ -fopenmp -I/opt/local/include main.cpp nucleation.cpp potential.cpp transfer_matrix.cpp -o Nucleation -L/opt/local/lib -lboost_program_options-mt
 echo "Complete."

@@ -5,10 +5,13 @@
 
 #include "nucleation.hpp"
 #include "potential.hpp"
+#include "transfer_matrix.hpp"
 
 
 int main(int argc, char* argv[])
 {
+	Nucleation *nuc_para;
+
 	try{
 		boost::program_options::options_description desc("Nucleation required parameters");
 		desc.add_options()
@@ -35,14 +38,14 @@ int main(int argc, char* argv[])
 		boost::program_options::notify(vm);
 
 		// Create object containing the nucleation parameters from cmdline (through BOOST vm)
-		Nucleation nuc_para(vm["N"].as<int>(),
-								vm["L"].as<double>(),
-                       	vm["m"].as<int>(),
-                       	vm["kappa"].as<double>(),
-                       	vm["sigma"].as<double>(),
-                       	vm["etab"].as<double>(),
-                       	vm["umin"].as<int>(),
-                       	vm["umax"].as<int>());
+		nuc_para = new Nucleation(vm["N"].as<int>(),
+											vm["L"].as<double>(),
+                       				vm["m"].as<int>(),
+                       				vm["kappa"].as<double>(),
+                       				vm["sigma"].as<double>(),
+                       				vm["etab"].as<double>(),
+                       				vm["umin"].as<int>(),
+                       				vm["umax"].as<int>());
 	}
 	catch(std::exception& e) {
    	std::cerr << "error: " << e.what() << "\n";
@@ -59,13 +62,19 @@ int main(int argc, char* argv[])
 	omp_set_num_threads(num_processors);
 
 
+	/////////////////////////////////// 
+	//	Initialize Nucleation Objects //
+	/////////////////////////////////// 
 
-
-
-
-
-
-
+	std::cout << "\n--> Initializing pair potential..." << std::endl;
+	HarmonicPotential pair_potential(nuc_para);
+	pair_potential.OutputPotentialData();
+	pair_potential.DisplayType();
+	std::cout << "--> Complete." << std::endl;
+	
+	std::cout << "\n--> Initializing transfer matrices..." << std::endl;
+	TransferMatrix TM(pair_potential);
+	std::cout << "--> Complete." << std::endl;
 
 
 

@@ -4,7 +4,9 @@
 
 int main()
 {
-    Potential test(0.1,0.001,2.5);
+    Nucleation *nuc = new Nucleation(5,10,50,0.1,0.001,2.5,0,10);
+    
+    Potential test(nuc);
     
     TransferMatrix TM_dna(test);
     

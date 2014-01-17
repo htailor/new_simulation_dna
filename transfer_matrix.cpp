@@ -12,7 +12,7 @@ TransferMatrix::TransferMatrix(Potential p_)
 double TransferMatrix::g0(double eta_)
 {
     double _g0;
-    if(std::abs(eta_) <= transfer_matrix_potential.ETA_B()){
+    if(std::abs(eta_) <= transfer_matrix_potential.getNucleationParameters().eta_b){
         _g0 = 1;
     }
     else{
@@ -24,7 +24,7 @@ double TransferMatrix::g0(double eta_)
 double TransferMatrix::g1(double eta_)
 {
     double _g1;
-    if(std::abs(eta_) <= transfer_matrix_potential.ETA_B()){
+    if(std::abs(eta_) <= transfer_matrix_potential.getNucleationParameters().eta_b){
         _g1 = 0;
     }
     else{
@@ -32,8 +32,6 @@ double TransferMatrix::g1(double eta_)
     }
     return _g1;
 }
-
-
 
 double TransferMatrix::T(double ea_, double eb_)
 {
@@ -64,5 +62,3 @@ double TransferMatrix::T_hat11(double na_, double nb_)
 {
     return g1(na_)*g1(nb_)*T_hat(na_,nb_);
 }
-
-

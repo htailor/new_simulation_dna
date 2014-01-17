@@ -8,7 +8,7 @@ class Potential
 {
 	public:
 		Potential();
-		Potential(Nucleation nucleation_parameters_);
+		Potential(Nucleation *nucleation_parameters_);
     
 		std::string potential_name();
 
@@ -16,10 +16,12 @@ class Potential
 		void OutputPotentialData();
 
 		virtual double Value(double x_);
+
+		Nucleation getNucleationParameters();
     
 	protected:
     
-		Nucleation nucleation_parameters;
+		Nucleation *nucleation_parameters;
 
 		std::string name;
 
@@ -28,14 +30,14 @@ class Potential
 class HarmonicPotential: public Potential
 {
 	public:
-      HarmonicPotential(Nucleation nucleation_parameters_);
+      HarmonicPotential(Nucleation *nucleation_parameters_);
 		double Value(double x_);
 };
 
 class AnharmonicPotential: public Potential
 {
 	public:
-      AnharmonicPotential(Nucleation nucleation_parameters_);
+      AnharmonicPotential(Nucleation *nucleation_parameters_);
 		double Value(double x_);
 };
 
