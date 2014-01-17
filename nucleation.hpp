@@ -4,7 +4,7 @@
 struct Nucleation
 {
     int N;
-    int L;
+    double L;
     int m;
     double Delta;
     
@@ -17,7 +17,7 @@ struct Nucleation
     double umax;
     
     Nucleation();
-    Nucleation(int N_, int L_, int m_, double kappa_, double sigma_, double eta_b_, double umin_, double umax_);
+    Nucleation(int N_, double L_, int m_, double kappa_, double sigma_, double eta_b_, double umin_, double umax_);
 };
 
 

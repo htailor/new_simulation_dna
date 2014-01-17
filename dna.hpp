@@ -9,7 +9,7 @@ class DNA
     public:
     
         DNA();
-        DNA(Nucleation calculation_para_);
+        DNA(Nucleation nucleation_parameters_);
     
         // Analytical solution for the T transfer matrix
     
@@ -18,13 +18,13 @@ class DNA
     
         // Analytical Solution for T00 transfer matrix when eta goes to infinity
 
-        double LAMBDA_T(int t_);
-        double PSI_T(int t_, double eta_);
+        double LAMBDA_T00_INFINITY(int t_);
+        double PSI_T00_INFINITY(int t_, double eta_);
     
     
     private:
     
-        Nucleation dna_nucleation_values;
+        Nucleation nucleation_parameters;
     
         double T_ETA_BETA;
         double T_ETA_MU;

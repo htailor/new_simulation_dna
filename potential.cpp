@@ -9,11 +9,6 @@ Potential::Potential(Nucleation nucleation_parameters_) : nucleation_parameters(
 	name = "constant";
 }
 
-double Potential::Value(double x_)	// The equation of the potential
-{
-    return nucleation_parameters.kappa/nucleation_parameters.sigma;
-}
-
 std::string Potential::potential_name()	// Returns the string name of the potential
 {
     return name;
@@ -40,6 +35,10 @@ void Potential::OutputPotentialData()	// Outputs the potential data to a file.
 	}
 }
 
+double Potential::Value(double x_)	// The equation of the potential
+{
+    return nucleation_parameters.kappa/nucleation_parameters.sigma;
+}
 
 /// Harmonic Potential ///
 

@@ -9,7 +9,6 @@ TransferMatrix::TransferMatrix(Potential p_)
     transfer_matrix_potential = p_;
 }
 
-
 double TransferMatrix::g0(double eta_)
 {
     double _g0;

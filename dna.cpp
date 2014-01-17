@@ -9,13 +9,13 @@
 
 DNA::DNA(){}
 
-DNA::DNA(Nucleation nucleation_values_) : T_ETA_BETA(4)
+DNA::DNA(Nucleation nucleation_values_)
 {
-    dna_nucleation_values = nucleation_values_;
+    nucleation_parameters = nucleation_parameters_;
     
     T_ETA_BETA = 4;
     
-    T_ETA_MU = T_ETA_BETA/dna_nucleation_values.kappa_sigma_r;
+    T_ETA_MU = T_ETA_BETA/nucleation_parameters.kappa_sigma_r;
     
     T_ETA_C = 0.5*Sqrt(Squared(T_ETA_MU)+2*T_ETA_BETA*T_ETA_MU);
     
@@ -38,50 +38,28 @@ DNA::DNA(Nucleation nucleation_values_) : T_ETA_BETA(4)
     std::cout << "(DNA) ** T_ETA_K\t: " << T_ETA_K << std::endl;
     std::cout << "(DNA) ** T_ETA_EV0\t: " << T_ETA_EV0 << std::endl;
     std::cout << "(DNA) ** T_ETA_C0\t: " << T_ETA_C0 << std::endl;
-    
 }
 
 // Analytical eigenvalue and eigenvector solutions to the DNA backbone transfer matrix
 
 double DNA::LAMBDA_S(int s_)
 {
-    return Sqrt(M_PI)*exp(-Squared(M_PI*s_/dna_nucleation_values.L));
+    return Sqrt(M_PI)*exp(-Squared(M_PI*s_/nucleation_parameters.L));
 }
 
 std::complex<double> DNA::PSI_S(int s_, double xi_)
 {
-	return std::polar(1/Sqrt(dna_nucleation_values.L),s_*xi_*2*M_PI/dna_nucleation_values.L);
+	return std::polar(1/Sqrt(nucleation_parameters.L),s_*xi_*2*M_PI/nucleation_parameters.L);
 }
 
 // Analytical eigenvalue and eigenvector solutions to the DNA intact base-pair transfer matrix in the limit of eta going to inifty.
 
-double DNA::LAMBDA_T(int t_)
+double DNA::LAMBDA_T00_INFINITY(int t_)
 {
     return T_ETA_EV0*exp(-T_ETA_K*t_);
 }
 
-double DNA::PSI_T(int t_, double eta_)
+double DNA::PSI_T00_INFINITY(int t_, double eta_)
 {
-    //using namespace boost::math;
-    
-    //return 2*T_ETA_C0*Sqrt(1/pow(2,t_)*factorial<double>(t_))*exp(-0.5*T_ETA_C*Squared(eta_))*hermite(t_,T_ETA_B*eta_);
-    //return 2*T_ETA_C0*Sqrt(1/pow(2,t_)*factorial<double>(t_))*exp(-0.5*T_ETA_C*Squared(eta_));//*hermite(t_,T_ETA_B*eta_);
-
-	 return boost::math::factorial<double>(2);
+    return 2*T_ETA_C0*Sqrt(1/pow(2,t_)*boost::math::factorial<double>(t_))*exp(-0.5*T_ETA_C*Squared(eta_))*boost::math::hermite(t_,T_ETA_B*eta_);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

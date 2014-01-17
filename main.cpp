@@ -4,6 +4,7 @@
 #include <boost/program_options.hpp>
 
 #include "nucleation.hpp"
+#include "potential.hpp"
 
 
 int main(int argc, char* argv[])
@@ -34,14 +35,14 @@ int main(int argc, char* argv[])
 		boost::program_options::notify(vm);
 
 		// Create object containing the nucleation parameters from cmdline (through BOOST vm)
-		Nucleation sim(vm["N"].as<int>(),
-                       vm["L"].as<double>(),
-                       vm["m"].as<int>(),
-                       vm["kappa"].as<double>(),
-                       vm["sigma"].as<double>(),
-                       vm["etab"].as<double>(),
-                       vm["umin"].as<int>(),
-                       vm["umax"].as<int>());
+		Nucleation nuc_para(vm["N"].as<int>(),
+								vm["L"].as<double>(),
+                       	vm["m"].as<int>(),
+                       	vm["kappa"].as<double>(),
+                       	vm["sigma"].as<double>(),
+                       	vm["etab"].as<double>(),
+                       	vm["umin"].as<int>(),
+                       	vm["umax"].as<int>());
 	}
 	catch(std::exception& e) {
    	std::cerr << "error: " << e.what() << "\n";
@@ -56,6 +57,28 @@ int main(int argc, char* argv[])
 	std::cout << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl; 
 	// Sets number of threads for parallel programming
 	omp_set_num_threads(num_processors);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	std::cout << std::endl;
