@@ -1,5 +1,7 @@
 #include <iostream>
+#include <vector>
 #include <omp.h>
+#include <Eigen/Dense>
 
 #include <boost/program_options.hpp>
 
@@ -7,6 +9,7 @@
 #include "potential.hpp"
 #include "transfer_matrix.hpp"
 
+#define EVAL_CUTOFF 0.1
 
 int main(int argc, char* argv[])
 {
@@ -39,7 +42,7 @@ int main(int argc, char* argv[])
 
 		// Create object containing the nucleation parameters from cmdline (through BOOST vm)
 		nuc_para = new Nucleation(vm["N"].as<int>(),
-											vm["L"].as<double>(),
+									vm["L"].as<double>(),
                        				vm["m"].as<int>(),
                        				vm["kappa"].as<double>(),
                        				vm["sigma"].as<double>(),
@@ -57,22 +60,25 @@ int main(int argc, char* argv[])
 
 	// Detects number of processing cores available
 	const int num_processors = omp_get_max_threads();
-	std::cout << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl; 
+	std::cout << std::endl << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl; 
 	// Sets number of threads for parallel programming
 	omp_set_num_threads(num_processors);
 
 
 	/////////////////////////////////// 
-	//	Initialize Nucleation Objects //
+	// Initialize Nucleation Objects //
 	/////////////////////////////////// 
 
-	std::cout << "\n--> Initializing pair potential..." << std::endl;
+	const int MATRIX_DIM = 2*nuc_para->m+1;
+	const double DELTA = nuc_para->Delta;
+
+	std::cout << std::endl << "--> Initializing pair potential..." << std::endl;
 	HarmonicPotential pair_potential(nuc_para);
-	pair_potential.OutputPotentialData();
+	std::vector<PotentialData> Potential = pair_potential.OutputPotentialData();
 	pair_potential.DisplayType();
 	std::cout << "--> Complete." << std::endl;
 	
-	std::cout << "\n--> Initializing transfer matrices..." << std::endl;
+	std::cout << std::endl << "--> Initializing transfer matrices..." << std::endl;
 	TransferMatrix TM(pair_potential);
 	std::cout << "--> Complete." << std::endl;
 
@@ -80,6 +86,32 @@ int main(int argc, char* argv[])
 
 
 
+	std::cout << "--> Constructing T transfer matrix..." << std::endl;
+	Eigen::MatrixXd T(MATRIX_DIM,MATRIX_DIM);
+
+	for(int i=0;i<MATRIX_DIM;i++){
+		for(int j=0;j<MATRIX_DIM;j++){
+			T(i,j) = TM.T(i*DELTA,j*DELTA);
+		}
+	}
+	std::cout << "--> Complete." << std::endl;
+
+	Eigen::EigenSolver<Eigen::MatrixXd> eigen(T);
+	std::cout << "\nEigenvalues of T :" << std::endl;
+   Eigen::VectorXd eval = eigen.eigenvalues().real(); 
+
+	std::cout << eval.rows() << std::endl;
+	
+	int smax=0;	
+
+	for(int i=0;i<eval.rows();i++){
+		if(eval[i]>EVAL_CUTOFF){
+			smax = i;
+		}
+	}
+
+	std::cout << smax << std::endl;
+	std::cout << eval << std::endl;
 
 
 
@@ -89,6 +121,33 @@ int main(int argc, char* argv[])
 
 
 
+
+
+
+
+
+
+
+
+	std::cout << "\n--> Constructing T00 transfer matrix..." << std::endl;
+	Eigen::MatrixXd T00(MATRIX_DIM,MATRIX_DIM);
+
+	for(int i=0;i<MATRIX_DIM;i++){
+		for(int j=0;j<MATRIX_DIM;j++){
+			T00(i,j) = TM.T_hat00(i*DELTA,j*DELTA);
+		}
+	}
+	std::cout << "--> Complete." << std::endl;
+
+	std::cout << "\n--> Constructing T11 transfer matrix..." << std::endl;
+	Eigen::MatrixXd T11(MATRIX_DIM,MATRIX_DIM);
+
+	for(int i=0;i<MATRIX_DIM;i++){
+		for(int j=0;j<MATRIX_DIM;j++){
+			T11(i,j) = TM.T_hat11(i*DELTA,j*DELTA);
+		}
+	}
+	std::cout << "--> Complete." << std::endl;
 
 	std::cout << std::endl;
 	return 0;

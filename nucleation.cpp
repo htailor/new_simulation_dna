@@ -19,7 +19,7 @@ Nucleation::Nucleation(int N_, double L_, int m_, double kappa_, double sigma_, 
     umin = umin_; // Units of Delta i.e umin = 0*Delta, umax = 5*Delta
     umax = umax_; //
    
-	std::cout << std::endl; 
+	 std::cout << std::endl; 
     std::cout << "(Nucleation) Nucleation Parameters " << std::endl;
     std::cout << "(Nucleation) ** N\t\t: " << N << std::endl;
     std::cout << "(Nucleation) ** L\t\t: " << L << std::endl;
@@ -31,6 +31,4 @@ Nucleation::Nucleation(int N_, double L_, int m_, double kappa_, double sigma_, 
     std::cout << "(Nucleation) ** eta_b\t\t: " << eta_b << std::endl;
     std::cout << "(Nucleation) ** umin\t\t: " << umin << std::endl;
     std::cout << "(Nucleation) ** umax\t\t: " << umax << std::endl;
-	std::cout << std::endl; 
-
 }

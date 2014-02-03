@@ -2,7 +2,9 @@
 #define _POTENTIAL_
 
 #include <string>
+#include <vector>
 #include "nucleation.hpp"
+#include "data.hpp"
 
 class Potential
 {
@@ -13,7 +15,7 @@ class Potential
 		std::string potential_name();
 
       void DisplayType();
-		void OutputPotentialData();
+		std::vector<PotentialData> OutputPotentialData();
 
 		virtual double Value(double x_);
 
