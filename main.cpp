@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	const int MATRIX_DIM = 2*nuc_para->m+1;
 	const double DELTA = nuc_para->Delta;
 
-	std::cout << std::endl << "--> Initializing pair potential..." << std::endl;
+	std::cout << std::endl << "--> Initialising pair potential..." << std::endl;
 	HarmonicPotential pair_potential(nuc_para);
 	std::vector<PotentialData> Potential = pair_potential.OutputPotentialData();
 	pair_potential.DisplayType();
