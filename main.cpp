@@ -2,21 +2,18 @@
 #include <vector>
 #include <omp.h>
 #include <Eigen/Dense>
-
 #include <boost/program_options.hpp>
 
 #include "nucleation.hpp"
 #include "potential.hpp"
 #include "transfer_matrix.hpp"
 
-#define EVAL_CUTOFF 0.1
-
 int main(int argc, char* argv[])
 {
 	Nucleation *nuc_para;
 
 	try{
-		boost::program_options::options_description desc("Nucleation required parameters");
+	    boost::program_options::options_description desc("Nucleation required parameters");
 		desc.add_options()
 			("N", boost::program_options::value<int>()->required(), "Length of the biomolecule (nodes)")
 			("L", boost::program_options::value<double>()->required(), "Length of dimensionless space eta")
@@ -41,7 +38,7 @@ int main(int argc, char* argv[])
 		boost::program_options::notify(vm);
 
 		// Create object containing the nucleation parameters from cmdline (through BOOST vm)
-		nuc_para = new Nucleation(vm["N"].as<int>(),
+	    nuc_para = new Nucleation(vm["N"].as<int>(),
 									vm["L"].as<double>(),
                        				vm["m"].as<int>(),
                        				vm["kappa"].as<double>(),
@@ -50,17 +47,17 @@ int main(int argc, char* argv[])
                        				vm["umin"].as<int>(),
                        				vm["umax"].as<int>());
 	}
-	catch(std::exception& e) {
-   	std::cerr << "error: " << e.what() << "\n";
-      return 1;
-   }
-   catch(...) {
-      std::cerr << "Exception of unknown type!\n";
-   }
+	catch(std::exception& e){
+   	    std::cerr << "error: " << e.what() << "\n";
+        return 1;
+    }
+    catch(...) {
+        std::cerr << "Exception of unknown type!\n";
+    }
 
 	// Detects number of processing cores available
 	const int num_processors = omp_get_max_threads();
-	std::cout << std::endl << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl; 
+	std::cout << std::endl << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl << std::endl; 
 	// Sets number of threads for parallel programming
 	omp_set_num_threads(num_processors);
 
@@ -69,86 +66,61 @@ int main(int argc, char* argv[])
 	// Initialize Nucleation Objects //
 	/////////////////////////////////// 
 
-	const int MATRIX_DIM = 2*nuc_para->m+1;
-	const double DELTA = nuc_para->Delta;
-
-	std::cout << std::endl << "--> Initialising pair potential..." << std::endl;
-	HarmonicPotential pair_potential(nuc_para);
-	std::vector<PotentialData> Potential = pair_potential.OutputPotentialData();
+	std::cout << "--> Initialising pair potential..." << std::endl;
+	Potential pair_potential(nuc_para);
 	pair_potential.DisplayType();
-	std::cout << "--> Complete." << std::endl;
+    pair_potential.OutputPotentialData();
+	std::cout << "--> Complete." << std::endl << std::endl;
+
+	std::cout << "--> Initialising transfer matrix functions..." << std::endl;
+	TransferMatrixFunctions functions(pair_potential);
+	std::cout << "--> Complete." << std::endl << std::endl;
 	
-	std::cout << std::endl << "--> Initializing transfer matrices..." << std::endl;
-	TransferMatrix TM(pair_potential);
-	std::cout << "--> Complete." << std::endl;
+	std::cout << "--> Initialising T, T00, T11 transfer matrices, calculating eigenvalues and eigenvectors..." << std::endl;
 
+    T t_matrix(pair_potential);
+    T00 t00_matrix(pair_potential);
+    T11 t11_matrix(pair_potential);
 
+    #pragma omp parallel sections 
+    {
+	    #pragma omp section
+        {
+            t_matrix.ComputeEigensystem();
+            t_matrix.OutputData();
+            std::cout << "--> Transfer Matrix " << t_matrix.Label() << " Complete." << std::endl;
+        }
+        #pragma omp section
+        {
+            t00_matrix.ComputeEigensystem();
+            t00_matrix.OutputData();
+            std::cout << "--> Transfer Matrix " << t00_matrix.Label() << " Complete." << std::endl;
+        }
+        #pragma omp section
+        {
+            t11_matrix.ComputeEigensystem();
+            t11_matrix.OutputData();
+            std::cout << "--> Transfer Matrix " << t11_matrix.Label() << " Complete." << std::endl;
+        }
+    }
 
-
-
-	std::cout << "--> Constructing T transfer matrix..." << std::endl;
-	Eigen::MatrixXd T(MATRIX_DIM,MATRIX_DIM);
-
-	for(int i=0;i<MATRIX_DIM;i++){
-		for(int j=0;j<MATRIX_DIM;j++){
-			T(i,j) = TM.T(i*DELTA,j*DELTA);
-		}
-	}
-	std::cout << "--> Complete." << std::endl;
-
-	Eigen::EigenSolver<Eigen::MatrixXd> eigen(T);
-	std::cout << "\nEigenvalues of T :" << std::endl;
-   Eigen::VectorXd eval = eigen.eigenvalues().real(); 
-
-	std::cout << eval.rows() << std::endl;
+   	const int smax = t_matrix.GetEigenSystemMax();
+   	const int tmax = t00_matrix.GetEigenSystemMax();
+	const int vmax = t11_matrix.GetEigenSystemMax();
+    
+   	std::cout << std::endl << "--> MAX EVAL (T Matrix) : " << smax << std::endl;
+   	std::cout << "--> MAX EVAL (T00 Matrix) : " << tmax << std::endl;
+   	std::cout << "--> MAX EVAL (T11 Matrix) : " << vmax << std::endl << std::endl;
 	
-	int smax=0;	
-
-	for(int i=0;i<eval.rows();i++){
-		if(eval[i]>EVAL_CUTOFF){
-			smax = i;
-		}
-	}
-
-	std::cout << smax << std::endl;
-	std::cout << eval << std::endl;
+	
+	
+	
+	
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-	std::cout << "\n--> Constructing T00 transfer matrix..." << std::endl;
-	Eigen::MatrixXd T00(MATRIX_DIM,MATRIX_DIM);
-
-	for(int i=0;i<MATRIX_DIM;i++){
-		for(int j=0;j<MATRIX_DIM;j++){
-			T00(i,j) = TM.T_hat00(i*DELTA,j*DELTA);
-		}
-	}
-	std::cout << "--> Complete." << std::endl;
-
-	std::cout << "\n--> Constructing T11 transfer matrix..." << std::endl;
-	Eigen::MatrixXd T11(MATRIX_DIM,MATRIX_DIM);
-
-	for(int i=0;i<MATRIX_DIM;i++){
-		for(int j=0;j<MATRIX_DIM;j++){
-			T11(i,j) = TM.T_hat11(i*DELTA,j*DELTA);
-		}
-	}
-	std::cout << "--> Complete." << std::endl;
-
-	std::cout << std::endl;
 	return 0;
 }

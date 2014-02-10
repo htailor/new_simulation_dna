@@ -21,11 +21,5 @@ int main()
 	H->OutputPotentialData();
 
 
-	HarmonicPotential h1(test);
-   h1.DisplayType();    
-   std::cout << h1.potential_name() << std::endl; 
-	
-	std::cout << h1.getNucleationParameters().L << std::endl;
-
 	return 0;
 }

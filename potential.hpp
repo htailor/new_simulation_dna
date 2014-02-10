@@ -14,10 +14,10 @@ class Potential
     
 		std::string potential_name();
 
-      void DisplayType();
-		std::vector<PotentialData> OutputPotentialData();
+      	void DisplayType();
+		void OutputPotentialData();
 
-		virtual double Value(double x_);
+		double Value(double x_);
 
 		Nucleation getNucleationParameters();
     
@@ -28,19 +28,4 @@ class Potential
 		std::string name;
 
 };
-
-class HarmonicPotential: public Potential
-{
-	public:
-      HarmonicPotential(Nucleation *nucleation_parameters_);
-		double Value(double x_);
-};
-
-class AnharmonicPotential: public Potential
-{
-	public:
-      AnharmonicPotential(Nucleation *nucleation_parameters_);
-		double Value(double x_);
-};
-
 #endif

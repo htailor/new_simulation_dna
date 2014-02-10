@@ -1,38 +1,71 @@
 #ifndef _TRANSFER_MATRIX_
 #define _TRANSFER_MATRIX_
 
-#include "potential.hpp"
+#include <string>
+#include <Eigen/Dense>
+#include "transfer_matrix_functions.hpp"
 
-class TransferMatrix
+class TransferMatrix : public TransferMatrixFunctions
+{
+
+    public:
+        
+        void OutputData();
+		void ComputeEigensystem();
+        int GetEigenSystemMax();
+        std::string Label();
+       
+    protected:
+ 
+        TransferMatrix();
+        TransferMatrix(Potential p_, std::string label_);
+        
+        void GenerateMatrix();        
+        virtual double function(double ea_, double eb_){};
+    
+        int m;
+        int dimension;
+        double delta;
+
+		std::string matrix_label;
+		std::string matrix_filename;
+		std::string eval_filename;
+		std::string evec_filename;
+        
+        Eigen::MatrixXd transfer_matrix;
+        Eigen::MatrixXd evec;
+        Eigen::VectorXd eval;
+};
+
+
+class T : public TransferMatrix
 {
     public:
     
-        TransferMatrix();
+        T();
+        T(Potential p_);
+        
+        double function(double ea_, double eb_);
+};
+
+class T00 : public TransferMatrix
+{
+    public:
     
-        TransferMatrix(Potential p_);
+        T00();
+        T00(Potential p_);
+        
+        double function(double ea_, double eb_);
+};
+
+class T11 : public TransferMatrix
+{
+    public:
     
-    
-        double T(double ea_, double eb_);
-    
-        double T_hat(double na_, double nb_);
-    
-        double T_hat00(double na_, double nb_);
-    
-        double T_hat01(double na_, double nb_);
-    
-        double T_hat10(double na_, double nb_);
-    
-        double T_hat11(double na_, double nb_);
-    
-    
-    private:
-    
-        double g0(double eta_);
-    
-        double g1(double eta_);
-    
-        Potential transfer_matrix_potential;
-    
+        T11();
+        T11(Potential p_);
+        
+        double function(double ea_, double eb_);
 };
 
 #endif

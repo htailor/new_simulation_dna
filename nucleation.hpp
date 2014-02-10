@@ -3,10 +3,13 @@
 
 struct Nucleation
 {
+	Nucleation();
+    Nucleation(int N_, double L_, int m_, double kappa_, double sigma_, double eta_b_, double umin_, double umax_);
+	
     int N;
     double L;
     int m;
-    double Delta;
+    double delta;
     
     double kappa;
     double sigma;
@@ -16,8 +19,8 @@ struct Nucleation
     double umin;
     double umax;
     
-    Nucleation();
-    Nucleation(int N_, double L_, int m_, double kappa_, double sigma_, double eta_b_, double umin_, double umax_);
+	int dimension;
+    
 };
 
 
