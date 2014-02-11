@@ -2,14 +2,31 @@
 #include <vector>
 #include <omp.h>
 #include <Eigen/Dense>
+
 #include <boost/program_options.hpp>
+#include <boost/filesystem.hpp>
 
 #include "nucleation.hpp"
 #include "potential.hpp"
 #include "transfer_matrix.hpp"
 
+
+void CleanOutputData(const char *dir){
+    boost::filesystem::path results_dir(dir);
+    if(boost::filesystem::exists(results_dir)){
+        std::cout << "--> Clearing old " << dir << " data..." << std::endl;
+        boost::filesystem::remove_all(results_dir);
+    }
+    boost::filesystem::create_directory(results_dir);
+    std::cout << "--> Complete." << std::endl;
+}
+
+
+
+
+
 int main(int argc, char* argv[])
-{
+{	
 	Nucleation *nuc_para;
 
 	try{
@@ -54,7 +71,18 @@ int main(int argc, char* argv[])
     catch(...) {
         std::cerr << "Exception of unknown type!\n";
     }
+    
+    //////////////////////// 
+	// Setup Calculations //
+	//////////////////////// 
 
+    // Clear old data
+    std::cout << "--> Results directory: " << nuc_para->results_dir << std::endl;
+    CleanOutputData(nuc_para->results_dir); 
+    std::cout << "--> Log directory: " << nuc_para->log_dir << std::endl;
+    CleanOutputData(nuc_para->log_dir); 
+
+    return 0;
 	// Detects number of processing cores available
 	const int num_processors = omp_get_max_threads();
 	std::cout << std::endl << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl << std::endl; 

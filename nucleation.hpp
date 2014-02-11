@@ -20,6 +20,9 @@ struct Nucleation
     double umax;
     
 	int dimension;
+
+    const char *results_dir;
+    const char *log_dir;
     
 };
 
