@@ -14,9 +14,9 @@ TransferMatrix::TransferMatrix(Potential p_, std::string label_) : TransferMatri
     dimension = TransferMatrixFunctions::parameters.dimension;
 
 	matrix_label = label_;
-	matrix_filename = label_ + "_matrix.data";
-	eval_filename = label_ + "_eval.data";
-	evec_filename = label_ + "_evec.data";
+	matrix_filename = TransferMatrixFunctions::parameters.log_dir + "/" + label_ + "_matrix.data";
+	eval_filename = TransferMatrixFunctions::parameters.log_dir + "/" + label_ + "_eval.data";
+	evec_filename = TransferMatrixFunctions::parameters.log_dir + "/" + label_ + "_evec.data";
 }
 
 void TransferMatrix::OutputData()

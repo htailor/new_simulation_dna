@@ -11,18 +11,15 @@
 #include "transfer_matrix.hpp"
 
 
-void CleanOutputData(const char *dir){
-    boost::filesystem::path results_dir(dir);
-    if(boost::filesystem::exists(results_dir)){
+void CleanOutputData(std::string dir){
+    boost::filesystem::path data_dir(dir);
+    if(boost::filesystem::exists(data_dir)){
         std::cout << "--> Clearing old " << dir << " data..." << std::endl;
-        boost::filesystem::remove_all(results_dir);
+        boost::filesystem::remove_all(data_dir);
     }
-    boost::filesystem::create_directory(results_dir);
+    boost::filesystem::create_directory(data_dir);
     std::cout << "--> Complete." << std::endl;
 }
-
-
-
 
 
 int main(int argc, char* argv[])
@@ -82,7 +79,7 @@ int main(int argc, char* argv[])
     std::cout << "--> Log directory: " << nuc_para->log_dir << std::endl;
     CleanOutputData(nuc_para->log_dir); 
 
-    return 0;
+
 	// Detects number of processing cores available
 	const int num_processors = omp_get_max_threads();
 	std::cout << std::endl << "*** Number of parallel processing threads (" << num_processors << ")" << std::endl << std::endl; 
@@ -99,8 +96,8 @@ int main(int argc, char* argv[])
 	pair_potential.DisplayType();
     pair_potential.OutputPotentialData();
 	std::cout << "--> Complete." << std::endl << std::endl;
-
-	std::cout << "--> Initialising transfer matrix functions..." << std::endl;
+	
+    std::cout << "--> Initialising transfer matrix functions..." << std::endl;
 	TransferMatrixFunctions functions(pair_potential);
 	std::cout << "--> Complete." << std::endl << std::endl;
 	

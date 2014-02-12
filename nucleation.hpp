@@ -1,6 +1,8 @@
 #ifndef _NUCLEATION_
 #define _NUCLEATION_
 
+#include <string>
+
 struct Nucleation
 {
 	Nucleation();
@@ -21,9 +23,8 @@ struct Nucleation
     
 	int dimension;
 
-    const char *results_dir;
-    const char *log_dir;
-    
+    std::string results_dir;
+    std::string log_dir;
 };
 
 

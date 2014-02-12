@@ -26,7 +26,7 @@ void Potential::DisplayType()		// Prints the name of the potential
 
 void Potential::OutputPotentialData()	// Outputs the potential data to a file.
 {
-	std::string data_filename = "potential_" + potential_name() + ".data";	// Specifies the filename to be created
+	std::string data_filename = nucleation_parameters->results_dir + "/potential_" + potential_name() + ".data";	// Specifies the filename to be created
 	std::ofstream potential_data_file(data_filename.data());
 	if(potential_data_file.is_open())
 	{
