@@ -6,7 +6,7 @@ int main()
 {
     Nucleation *nuc = new Nucleation(5,10,50,0.1,0.001,2.5,0,10);
     
-    Potential pe(nuc);
+    Potential pe(nuc,"harmonic");
     TransferMatrixFunctions TM(pe);
 
     std::cout << TM.T(0,1) << std::endl;

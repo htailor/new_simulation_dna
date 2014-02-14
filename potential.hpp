@@ -2,30 +2,26 @@
 #define _POTENTIAL_
 
 #include <string>
-#include <vector>
 #include "nucleation.hpp"
-#include "data.hpp"
 
 class Potential
 {
 	public:
+		
 		Potential();
-		Potential(Nucleation *nucleation_parameters_);
-    
-		std::string potential_name();
-
-      	void DisplayType();
+		Potential(Nucleation *parameters_, std::string label_);
+		
+		double Value(double eta_);
+		
+		std::string Name();
 		void OutputPotentialData();
-
-		double Value(double x_);
-
-		Nucleation getNucleationParameters();
-    
+		
+		Nucleation *parameters;
+		
 	protected:
-    
-		Nucleation *nucleation_parameters;
-
-		std::string name;
-
+	
+		std::string potential_label;
+		std::string output_filename;
 };
+
 #endif

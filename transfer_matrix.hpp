@@ -12,8 +12,10 @@ class TransferMatrix : public TransferMatrixFunctions
         
         void OutputData();
 		void ComputeEigensystem();
-        int GetEigenSystemMax();
+        int OrderEigenSystemMax();
         std::string Label();
+        
+        std::vector<std::pair<double,std::vector<double> > > Eigen;
        
     protected:
  
@@ -35,6 +37,8 @@ class TransferMatrix : public TransferMatrixFunctions
         Eigen::MatrixXd transfer_matrix;
         Eigen::MatrixXd evec;
         Eigen::VectorXd eval;
+        
+        
 };
 
 

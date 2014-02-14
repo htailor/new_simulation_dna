@@ -7,18 +7,13 @@ TransferMatrixFunctions::TransferMatrixFunctions(){}
 TransferMatrixFunctions::TransferMatrixFunctions(Potential p_)
 {
     potential = p_;
-    parameters = potential.getNucleationParameters();
-}
-
-double TransferMatrixFunctions::potential_test(double eta_)
-{
-	return potential.Value(eta_);
+    parameters = p_.parameters;
 }
 
 double TransferMatrixFunctions::g0(double eta_)
 {
     double _g0;
-    if(std::abs(eta_) < parameters.eta_b){
+    if(std::abs(eta_) < parameters->eta_b){
         _g0 = 1;
     }
     else{
@@ -30,7 +25,7 @@ double TransferMatrixFunctions::g0(double eta_)
 double TransferMatrixFunctions::g1(double eta_)
 {
     double _g1;
-    if(std::abs(eta_) < parameters.eta_b){
+    if(std::abs(eta_) < parameters->eta_b){
         _g1 = 0;
     }
     else{

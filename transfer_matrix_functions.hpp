@@ -24,8 +24,6 @@ class TransferMatrixFunctions
     
       double T_hat11(double na_, double nb_);
 
-	  double potential_test(double eta_);
-    
     
     protected:
     
@@ -35,7 +33,7 @@ class TransferMatrixFunctions
     
       Potential potential;
         
-      Nucleation parameters; 
+      Nucleation *parameters; 
 };
 
 #endif

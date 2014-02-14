@@ -4,42 +4,37 @@
 
 Potential::Potential(){}
 
-Potential::Potential(Nucleation *nucleation_parameters_) : nucleation_parameters(nucleation_parameters_)
+Potential::Potential(Nucleation *parameters_, std::string label_)
 {
-	name = "harmonic";
+	parameters = parameters_;
+	potential_label = label_;
+	output_filename = parameters->results_dir + "/" + label_ + "_potential.data";
+	
+	std::cout << "(Potential) ** base-pair type: " << potential_label << std::endl;
 }
 
-Nucleation Potential::getNucleationParameters()
+double Potential::Value(double eta_)	// The equation of a harmonic potential
 {
-	return *nucleation_parameters;
+	return (parameters->sigma/parameters->kappa)*Squared(eta_);
 }
 
-std::string Potential::potential_name()	// Returns the string name of the potential
+std::string Potential::Name()	// Returns the string name of the potential
 {
-    return name;
-}
-
-void Potential::DisplayType()		// Prints the name of the potential
-{
-    std::cout << "(Potential) ** Potential Type: " << potential_name() << std::endl;
+    return potential_label;
 }
 
 void Potential::OutputPotentialData()	// Outputs the potential data to a file.
 {
-	std::string data_filename = nucleation_parameters->results_dir + "/potential_" + potential_name() + ".data";	// Specifies the filename to be created
-	std::ofstream potential_data_file(data_filename.data());
+	std::ofstream potential_data_file(output_filename.data());
 	if(potential_data_file.is_open())
 	{
-		for(int i = -nucleation_parameters->m;i<=nucleation_parameters->m;++i){	// Writes x,y data points for the potential from -m*Delta to m*Delta (from nucleation)
-			double eta = i*nucleation_parameters->delta;						// Points at -L and L can be ignored since it does not affect the shape of the potential
+		for(int i = -parameters->m;i<=parameters->m;++i){	// Writes x,y data points for the potential from -m*Delta to m*Delta (from nucleation)
+			double eta = i*parameters->delta;				// Points at -L and L can be ignored since it does not affect the shape of the potential
 			potential_data_file << eta << "," << Value(eta) << std::endl;
 		}		
 		potential_data_file.close();
 	}
 }
 
-double Potential::Value(double x_)	// The equation of the potential
-{
-	return (nucleation_parameters->sigma/nucleation_parameters->kappa)*Squared(x_);
-}
+
 

@@ -25,6 +25,7 @@ struct Nucleation
 
     std::string results_dir;
     std::string log_dir;
+    std::string eigen_dir;
 };
 
 

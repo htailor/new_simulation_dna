@@ -24,7 +24,7 @@ void CleanOutputData(std::string dir){
 
 int main(int argc, char* argv[])
 {	
-	Nucleation *nuc_para;
+	Nucleation *parameters;
 
 	try{
 	    boost::program_options::options_description desc("Nucleation required parameters");
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 		boost::program_options::notify(vm);
 
 		// Create object containing the nucleation parameters from cmdline (through BOOST vm)
-	    nuc_para = new Nucleation(vm["N"].as<int>(),
+	    parameters = new Nucleation(vm["N"].as<int>(),
 									vm["L"].as<double>(),
                        				vm["m"].as<int>(),
                        				vm["kappa"].as<double>(),
@@ -74,11 +74,12 @@ int main(int argc, char* argv[])
 	//////////////////////// 
 
     // Clear old data
-    std::cout << "--> Results directory: " << nuc_para->results_dir << std::endl;
-    CleanOutputData(nuc_para->results_dir); 
-    std::cout << "--> Log directory: " << nuc_para->log_dir << std::endl;
-    CleanOutputData(nuc_para->log_dir); 
-
+    std::cout << "--> Results directory: " << parameters->results_dir << std::endl;
+    CleanOutputData(parameters->results_dir); 
+    std::cout << "--> Log directory: " << parameters->log_dir << std::endl;
+    CleanOutputData(parameters->log_dir); 
+	std::cout << "--> Eigensystem directory: " << parameters->eigen_dir << std::endl;
+	CleanOutputData(parameters->eigen_dir); 
 
 	// Detects number of processing cores available
 	const int num_processors = omp_get_max_threads();
@@ -92,17 +93,15 @@ int main(int argc, char* argv[])
 	/////////////////////////////////// 
 
 	std::cout << "--> Initialising pair potential..." << std::endl;
-	Potential pair_potential(nuc_para);
-	pair_potential.DisplayType();
+	Potential pair_potential(parameters,"harmonic");
     pair_potential.OutputPotentialData();
 	std::cout << "--> Complete." << std::endl << std::endl;
 	
-    std::cout << "--> Initialising transfer matrix functions..." << std::endl;
+	std::cout << "--> Initialising transfer matrix functions..." << std::endl;
 	TransferMatrixFunctions functions(pair_potential);
 	std::cout << "--> Complete." << std::endl << std::endl;
 	
 	std::cout << "--> Initialising T, T00, T11 transfer matrices, calculating eigenvalues and eigenvectors..." << std::endl;
-
     T t_matrix(pair_potential);
     T00 t00_matrix(pair_potential);
     T11 t11_matrix(pair_potential);
@@ -112,40 +111,29 @@ int main(int argc, char* argv[])
 	    #pragma omp section
         {
             t_matrix.ComputeEigensystem();
-            t_matrix.OutputData();
             std::cout << "--> Transfer Matrix " << t_matrix.Label() << " Complete." << std::endl;
         }
         #pragma omp section
         {
             t00_matrix.ComputeEigensystem();
-            t00_matrix.OutputData();
             std::cout << "--> Transfer Matrix " << t00_matrix.Label() << " Complete." << std::endl;
         }
         #pragma omp section
         {
             t11_matrix.ComputeEigensystem();
-            t11_matrix.OutputData();
             std::cout << "--> Transfer Matrix " << t11_matrix.Label() << " Complete." << std::endl;
         }
     }
 
-   	const int smax = t_matrix.GetEigenSystemMax();
-   	const int tmax = t00_matrix.GetEigenSystemMax();
-	const int vmax = t11_matrix.GetEigenSystemMax();
+   	const int smax = t_matrix.OrderEigenSystemMax();
+   	const int tmax = t00_matrix.OrderEigenSystemMax();
+	const int vmax = t11_matrix.OrderEigenSystemMax();
     
-   	std::cout << std::endl << "--> MAX EVAL (T Matrix) : " << smax << std::endl;
-   	std::cout << "--> MAX EVAL (T00 Matrix) : " << tmax << std::endl;
-   	std::cout << "--> MAX EVAL (T11 Matrix) : " << vmax << std::endl << std::endl;
-	
-	
-	
-	
-	
-
-
-
-
-
-
+   	std::cout << std::endl << "--> MAX EVAL (T Matrix)\t\t: " << smax << std::endl;
+   	std::cout << "--> MAX EVAL (T00 Matrix)\t: " << tmax << std::endl;
+   	std::cout << "--> MAX EVAL (T11 Matrix)\t: " << vmax << std::endl << std::endl;
+   	
+   	
+   	
 	return 0;
 }

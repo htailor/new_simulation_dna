@@ -16,13 +16,14 @@ Nucleation::Nucleation(int N_, double L_, int m_, double kappa_, double sigma_, 
 
     eta_b = eta_b_;
     
-    umin = umin_; // Units of Delta i.e umin = 0*Delta, umax = 5*Delta
+    umin = umin_; // Units of delta i.e umin = 0*delta, umax = 5*delta
     umax = umax_; //
 	
 	dimension = 2*m_ + 1;
 
     results_dir = "./results";
     log_dir = "./log";
+    eigen_dir = log_dir + "/eigen";
    
 	std::cout << std::endl;
     std::cout << "(Nucleation) Nucleation Parameters " << std::endl;
