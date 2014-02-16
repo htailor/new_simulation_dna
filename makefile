@@ -5,42 +5,24 @@ LIBS = -L/opt/local/lib
 LDFLAGS = -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt
 TARGET = Nucleation
 
+SOURCE_DIR = src/
+OBJ_DIR = /obj
+
+SOURCES = main.cpp nucleation.cpp potential.cpp transfer_matrix_functions.cpp transfer_matrix.cpp
+OBJECTS = $(SOURCES:%.cpp=%.o)
+
 COMPILE = $(CC) $(CPPFLAGS) -c $(INCLUDE)
 LINK = $(CC) $(CPPFLAGS) $(INCLUDE)
 
-all: $(TARGET)
+all: $(SOURCES) $(TARGET)
 
-$(TARGET):	main.o nucleation.o potential.o transfer_matrix_functions.o transfer_matrix.o
+$(TARGET):	$(OBJECTS)
 	@echo "<**Linking**> $@"
-	@$(LINK) main.o nucleation.o potential.o transfer_matrix_functions.o transfer_matrix.o $(LIBS) $(LDFLAGS) -o $(TARGET)
+	@$(LINK) $(OBJECTS) $(LIBS) $(LDFLAGS) -o $(TARGET)
 
-main.o: main.cpp
+%.o: %.cpp
 	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
-
-nucleation.o: nucleation.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
-
-potential.o: potential.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
-                
-transfer_matrix_functions.o: transfer_matrix_functions.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
-
-transfer_matrix.o: transfer_matrix.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
-
-dna.o: dna.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
-        
-mathematical_functions.o: mathematical_functions.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $<
+	@$(COMPILE) $< -o $@
 
 clean:
-	@rm -f $(TARGET) *.o
+	@rm -f $(TARGET) $(OBJECTS)
