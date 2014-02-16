@@ -1,30 +1,46 @@
-CC  = g++
-CFLAGS=-c
+CC = g++
+CPPFLAGS = -std=c++11 -fopenmp
+INCLUDE = -I/opt/local/include
+LIBS = -L/opt/local/lib
+LDFLAGS = -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt
+TARGET = Nucleation
 
-all: Nucleation
+COMPILE = $(CC) $(CPPFLAGS) -c $(INCLUDE)
+LINK = $(CC) $(CPPFLAGS) $(INCLUDE)
 
-Nucleation: main.o nucleation.o potential.o transfer_matrix_functions.o transfer_matrix.o
-        $(CC) main.o nucleation.o potential.o transfer_matrix_functions.o transfer_matrix.o -o Nucleation
+all: $(TARGET)
 
-nucleation.o:   nucleation.cpp
-        $(CC) $(CFLAGS) nucleation.cpp
+$(TARGET):	main.o nucleation.o potential.o transfer_matrix_functions.o transfer_matrix.o
+	@echo "<**Linking**> $@"
+	@$(LINK) main.o nucleation.o potential.o transfer_matrix_functions.o transfer_matrix.o $(LIBS) $(LDFLAGS) -o $(TARGET)
 
-potential.o:    potential.cpp
-        $(CC) $(CFLAGS) potential.cpp
+main.o: main.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
+
+nucleation.o: nucleation.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
+
+potential.o: potential.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
                 
-transfer_matrix_functions.o:    transfer_matrix_functions.cpp
-        $(CC) $(CFLAGS) transfer_matrix_functions.cpp
+transfer_matrix_functions.o: transfer_matrix_functions.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
 
-transfer_matrix.o:   transfer_matrix.cpp
-        $(CC) $(CFLAGS) transfer_matrix.cpp
-                
+transfer_matrix.o: transfer_matrix.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
 
-clean: 
-        rm -rf *.o Nucleation
+dna.o: dna.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
+        
+mathematical_functions.o: mathematical_functions.cpp
+	@echo "<**Compiling**> $^"
+	@$(COMPILE) $<
 
-
-
-
- 
-clear
-g++ -std=c++11 -fopenmp -I/opt/local/include main.cpp nucleation.cpp potential.cpp transfer_matrix.cpp transfer_matrix_functions.cpp -o Nucleation -L/opt/local/lib -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt
+clean:
+	@rm -f $(TARGET) *.o
