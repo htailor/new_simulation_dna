@@ -5,24 +5,34 @@ LIBS = -L/opt/local/lib
 LDFLAGS = -lboost_program_options-mt -lboost_filesystem-mt -lboost_system-mt
 TARGET = Nucleation
 
-SOURCE_DIR = src/
-OBJ_DIR = /obj
-
-SOURCES = main.cpp nucleation.cpp potential.cpp transfer_matrix_functions.cpp transfer_matrix.cpp
-OBJECTS = $(SOURCES:%.cpp=%.o)
-
 COMPILE = $(CC) $(CPPFLAGS) -c $(INCLUDE)
 LINK = $(CC) $(CPPFLAGS) $(INCLUDE)
 
-all: $(SOURCES) $(TARGET)
+VPATH = src
+OBJ_DIR = obj
+SOURCE_FILES = main.cpp nucleation.cpp potential.cpp transfer_matrix_functions.cpp transfer_matrix.cpp
+OBJECT_FILES = $(SOURCE_FILES:%.cpp=%.o)
+OBJS = $(patsubst %.cpp,$(OBJ_DIR)/%.o,$(SOURCE_FILES))
 
-$(TARGET):	$(OBJECTS)
-	@echo "<**Linking**> $@"
-	@$(LINK) $(OBJECTS) $(LIBS) $(LDFLAGS) -o $(TARGET)
+all: $(TARGET)
 
-%.o: %.cpp
-	@echo "<**Compiling**> $^"
-	@$(COMPILE) $< -o $@
+$(TARGET):	$(OBJS)
+	@echo "<***Linking***> \t $@"
+	@$(LINK) $^ $(LIBS) $(LDFLAGS) -o $(TARGET)
 
+$(OBJ_DIR)/%.o : %.cpp | mkdir_obj
+	@echo "<**Compiling**> \t $^ -> $@"
+	@$(COMPILE) $^ -o $@
+
+mkdir_obj:
+	@mkdir -p $(OBJ_DIR)
+	
 clean:
-	@rm -f $(TARGET) $(OBJECTS)
+	@rm -rf $(TARGET) $(OBJS) $(OBJ_DIR)
+
+variables:
+	@echo
+	@echo "source files:\t $(SOURCE_FILES)"
+	@echo "object files:\t $(OBJECT_FILES)"
+	@echo "objects:\t $(OBJS)"
+	@echo
