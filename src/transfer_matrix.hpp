@@ -7,15 +7,14 @@
 
 class TransferMatrix : public TransferMatrixFunctions
 {
-
     public:
         
         void OutputData();
 		void ComputeEigensystem();
         int OrderEigenSystemMax();
         std::string Label();
+        std::vector<std::pair<double,std::vector<double> > > GetEigenSystemMax();
         
-        std::vector<std::pair<double,std::vector<double> > > Eigen;
        
     protected:
  
@@ -38,7 +37,7 @@ class TransferMatrix : public TransferMatrixFunctions
         Eigen::MatrixXd evec;
         Eigen::VectorXd eval;
         
-        
+        std::vector<std::pair<double,std::vector<double> > > Eigen;
 };
 
 

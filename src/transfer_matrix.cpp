@@ -52,6 +52,11 @@ std::string TransferMatrix::Label()
     return matrix_label;
 }
 
+std::vector<std::pair<double,std::vector<double> > > TransferMatrix::GetEigenSystemMax()
+{
+	return Eigen;
+}
+
 
 int TransferMatrix::OrderEigenSystemMax()
 {
