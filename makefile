@@ -1,3 +1,4 @@
+
 CC = g++
 CPPFLAGS = -std=c++11 -fopenmp
 INCLUDE = -I/opt/local/include
@@ -8,7 +9,8 @@ TARGET = Nucleation
 COMPILE = $(CC) $(CPPFLAGS) -c $(INCLUDE)
 LINK = $(CC) $(CPPFLAGS) $(INCLUDE)
 
-VPATH = src
+VPATH = .
+#VPATH = src
 OBJ_DIR = obj
 SOURCE_FILES = main.cpp nucleation.cpp potential.cpp transfer_matrix_functions.cpp transfer_matrix.cpp
 OBJECT_FILES = $(SOURCE_FILES:%.cpp=%.o)
@@ -36,3 +38,5 @@ variables:
 	@echo "object files:\t $(OBJECT_FILES)"
 	@echo "objects:\t $(OBJS)"
 	@echo
+
+
